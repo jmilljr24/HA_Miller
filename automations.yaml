@@ -1,0 +1,105 @@
+
+#### Driveway Light Sunset and Sunrise ####
+- id: SunDownDriveway
+  alias: Driveway Light ON at sunset
+  hide_entity: True
+  trigger:
+    platform: sun
+    event: sunset
+    offset: '-00:45:00'
+  action:
+    service: homeassistant.turn_on
+    entity_id: light.driveway_light_level
+    data:
+      brightness: 255
+
+- id: SunUpDriveway
+  alias: Driveway Light OFF at sunrise
+  hide_entity: True
+  trigger:
+    platform: sun
+    event: sunrise
+    offset: '00:45:00'
+  action:
+    service: homeassistant.turn_off
+    entity_id: light.driveway_light_level
+    
+##SSL Cert##    
+- alias: 'Auto Renew SSL Cert'
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.ssl_cert_expiry
+    below: 29
+  action:
+    service: shell_command.renew_ssl
+
+
+
+##### Bubbler Timer #####
+-  id: BubblerTimer
+   alias: Bubbler Timer
+   trigger:
+     platform: time
+     minutes: 50
+     seconds: 00
+   #condition:
+    # condition: numeric_state
+     #entity_id: sensor.yr_temperature
+     #below: 32.0
+   action:
+     - service: homeassistant.turn_on
+       entity_id: switch.Bubbler_switch
+     - delay: '00:10:00'
+     - service: homeassistant.turn_off
+       entity_id: switch.Bubbler_switch
+     
+#### Bubbler Time update w/ script ####
+#- id: bubbler_time_update
+ # alias: Bubbler Time Update
+  #trigger:
+   # platform: state
+    #entity_id: input_number.bubbler_duration
+  #action:
+   # service: script.
+
+##### Heater ###
+- alias: turn on cabin heater
+  hide_entity: True
+  trigger: 
+    - platform: state
+      entity_id: input_boolean.heater_switch
+      to: 'on'
+  action:
+    - service: ifttt.trigger
+      data: {"event": "heat", "value1": "On"}
+- alias: turn off cabin heater
+  hide_entity: True
+  trigger: 
+    - platform: state
+      entity_id: input_boolean.heater_switch
+      to: 'off'
+  action:
+    - service: ifttt.trigger
+      data: {"event": "heat", "value2": "Off"}
+      
+###Water Detection###
+- alias: Leak!
+  hide_entity: True
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.water_sensor_flood_1
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.water_sensor_flood_2
+      to: 'on'
+  action:
+    - service: homeassistant.turn_off
+      entity_id: switch.switch
+    - service: notify.justin_email
+      data:
+          title: "Water Alarm Triggered"
+          message: "Check the basement!"
+    - service: notify.justin_sms
+      data:
+          title: "Water Alarm Triggered"
+          message: "Check the basement!"

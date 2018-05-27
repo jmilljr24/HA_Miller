@@ -1,0 +1,47 @@
+####HIDDEN####
+    sensor.deadbolt_access_control:
+      hidden: true
+    sensor.deadbolt_alarm_level:
+      hidden: true
+    sensor.deadbolt_alarm_type:
+      hidden: true
+    sensor.deadbolt_battery:
+      hidden: false
+    sensor.deadbolt_burglar:
+      hidden: true
+    sensor.deadbolt_power_management:
+      hidden: true
+    sensor.deadbolt_sourcenodeid:
+      hidden: true
+    sensor.deadbolt_system:
+      hidden: true
+      
+    media_player.roku_5s56ax598258:
+      hidden: true
+      
+    sensor.alarm_level_3:
+      hidden: true
+    sensor.alarm_type_3:
+      hidden: true
+    sensor.aeotec_zw122_water_sensor_6_sourcenodeid_6:
+      hidden: true
+    sensor.aeotec_zw122_water_sensor_6_temperature_3:
+      hidden: true
+    sensor.aeotec_zw122_water_sensor_6_sourcenodeid_5:
+      hidden: true
+    sensor.aeotec_zw122_water_sensor_6_alarm_level_3:
+      hidden: true
+    sensor.aeotec_zw122_water_sensor_6_alarm_type_3:
+      hidden: true
+    sensor.aeotec_zw122_water_sensor_6_flood_6:
+      hidden: true
+    sensor.aeotec_zw122_water_sensor_6_flood_5:
+      hidden: true
+      
+    media_player.bedroom:
+      hidden: true
+      
+    binary_sensor.water_sensor_flood_1:
+      device_class: moisture
+    binary_sensor.water_sensor_flood_2:
+      device_class: moisture

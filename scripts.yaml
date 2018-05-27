@@ -1,0 +1,24 @@
+#set_usercode:
+ # alias: 'Set Usercode'
+  #sequence:
+   # - service: lock.set_usercode
+    #  data:
+     #   node_id: 4
+      #  code_slot: '{{ states.variable.code_slot.state }}'
+       # usercode: '{{ states.variable.usercode.state }}'
+        #code_slot: '{{ states.input_select.code_slot.state | int }}'
+        #usercode: '{{ states.input_number.entry_code.state | int }}'
+#        
+#set_bubbler_duration:
+ # sequence:
+  #  - service: variable.set_variable
+   #   data:
+    #   variable: bubbler_duration
+     #  value_template: '{{ states.input_number.bubbler_duration.state | int }}' 
+#
+#set_user_code:
+ # sequence:
+  #  - service: variable.set_variable
+   #   data:
+    #   variable: usercode
+     #  value_template: '{{ states.input_number.entry_code.state | int }}'

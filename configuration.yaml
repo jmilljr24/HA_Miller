@@ -1,0 +1,203 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude
+  longitude: !secret longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 476
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: America/New_York
+  # Customization file
+  customize: !include customize.yaml
+
+
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  api_password: !secret http_password
+  ssl_certificate: /etc/letsencrypt/live/jmilljr.duckdns.org/fullchain.pem
+  ssl_key: /etc/letsencrypt/live/jmilljr.duckdns.org/privkey.pem
+  base_url: jmilljr.duckdns.org
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+#Input Selections
+#input_number:
+ # bubbler_duration:
+  #  name: Bubbler Duration
+   # min: 0
+    #max: 60
+    #step: 1
+    #mode: box
+    #initial: 1111
+#   
+#input_select:
+  #code_slot:
+   # name: Code Slot
+    #options:
+     #- 6
+     #- 7
+     #- 8
+#     
+#variable:
+ # bubbler_duration:
+  #  value: 10
+
+
+sensor:
+# Weather prediction
+  - platform: wunderground
+    api_key: !secret wundergroundapi
+    monitored_conditions:
+      - weather_1d
+      - temp_high_1d_f
+      - temp_f
+      - temp_low_1d_f
+      - precip_1d
+      - precip_1d_mm
+      - wind_mph
+      - wind_1d_mph
+
+#### Deadbolt Battery Level  
+  - platform: template
+    sensors:
+      deadbolt_battery:
+        friendly_name: "Lock Battery"
+        value_template: >-
+          {%- if states.zwave.deadbolt -%}
+            {{ states.zwave.deadbolt.attributes.battery_level }}
+          {%- else -%}
+            n/a
+          {%- endif -%}
+        unit_of_measurement: '%'
+        entity_id: zwave.deadbolt
+
+  - platform: template
+    sensors:
+      water_sensor_battery:
+        friendly_name: "Water Sensor Battery"
+        value_template: '{{ states.zwave.water_sensor.attributes.battery_level }}'
+        unit_of_measurement: '%'
+        entity_id: zwave.water_sensor
+        
+  - platform: command_line
+    name: SSL cert expiry
+    unit_of_measurement: days
+    scan_interval: 10800
+    command: "ssl-cert-check -b -c /etc/letsencrypt/live/jmilljr.duckdns.org/cert.pem | awk '{ print $NF }'"
+
+binary_sensor:
+  - platform: template
+    sensors:
+      water_sensor_flood_1:
+        friendly_name: "Water Sensor 1"
+        device_class: moisture
+        value_template: "{{ states('sensor.aeotec_zw122_water_sensor_6_flood_5')|float == 2 }}"
+
+  - platform: template
+    sensors:
+      water_sensor_flood_2:
+        friendly_name: "Water Sensor 2"
+        device_class: moisture
+        value_template: "{{ states('sensor.aeotec_zw122_water_sensor_6_flood_6')|float == 2 }}"
+
+# Notifications
+notify:
+  - name: justin_email
+    platform: smtp
+    server: smtp.gmail.com
+    timeout: 15
+    sender: jmilljr24@gmail.com
+    username: jmilljr24@gmail.com
+    password: !secret gmail_smtp
+    recipient:
+      - jmilljr24@gmail.com
+      - trucker51559@gmail.com
+    sender_name: Home Assistant
+  - name: justin_sms
+    platform: smtp
+    server: smtp.gmail.com
+    timeout: 15
+    sender: jmilljr24@gmail.com
+    username: jmilljr24@gmail.com
+    password: !secret gmail_smtp
+    recipient:
+      - 6073166328@vtext.com
+    sender_name: Home Assistant
+    
+        
+# Text to speech
+tts:
+  - platform: google
+
+#Zwave
+
+zwave:
+  usb_path: /dev/ttyACM0
+  
+input_boolean:
+  heater_switch:
+    name: Cabin Heater
+    initial: off 
+
+ifttt:
+  key: !secret ifttt_key
+
+# Presence detection
+device_tracker:
+  - platform: nmap_tracker
+    hosts: 
+     -  192.168.86.151
+     -  192.168.86.153
+     -  192.168.86.163
+    consider_home: 1800
+    home_interval: 10
+    exclude:
+     - 192.168.86.137
+     - 192.168.86.23
+     - 192.168.86.23
+     - 192.168.86.21
+     - 192.168.86.65
+     - 192.168.86.139
+     
+shell_command: 
+  renew_ssl: ~/home/homeassistant/.homeassistant/certbot/certbot-auto renew --quiet --no-self-upgrade --standalone --preferred-challenges http-01
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
