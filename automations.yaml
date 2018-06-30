@@ -2,27 +2,27 @@
 #### Driveway Light Sunset and Sunrise ####
 - id: SunDownDriveway
   alias: Driveway Light ON at sunset
-  hide_entity: True
+  #hide_entity: True
   trigger:
     platform: sun
     event: sunset
     offset: '-00:45:00'
   action:
     service: homeassistant.turn_on
-    entity_id: light.driveway_light_level
+    entity_id: light.level
     data:
       brightness: 255
 
 - id: SunUpDriveway
   alias: Driveway Light OFF at sunrise
-  hide_entity: True
+  #hide_entity: True
   trigger:
     platform: sun
     event: sunrise
     offset: '00:45:00'
   action:
     service: homeassistant.turn_off
-    entity_id: light.driveway_light_level
+    entity_id: light.level
     
 ##SSL Cert##    
 - alias: 'Auto Renew SSL Cert'
@@ -103,3 +103,5 @@
       data:
           title: "Water Alarm Triggered"
           message: "Check the basement!"
+    - service: homeassistant.turn_off
+      entity_id: switch.switch_2

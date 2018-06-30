@@ -222,3 +222,19 @@ media_player.basement_speaker:
   name:
   platform: cast
   unique_id: eedd76dd-75b5-8b97-b658-90e8456ae5a1
+switch.switch_2:
+  name:
+  platform: zwave
+  unique_id: 12-72057594244055040
+zwave.dome_water_shutoff_valve:
+  name:
+  platform: zwave
+  unique_id: node-12
+light.level:
+  name:
+  platform: zwave
+  unique_id: 13-72057594260848641
+zwave.ge_zw7101_smart_led_light_bulb_ze26i:
+  name:
+  platform: zwave
+  unique_id: node-13
