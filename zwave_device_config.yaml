@@ -1,3 +1,9 @@
 switch.switch:
   ignored: false
   polling_intensity: 0
+light.level:
+  ignored: true
+  polling_intensity: 0
+light.ge_zw7101_smart_led_light_bulb_ze26i_level:
+  ignored: false
+  polling_intensity: 0

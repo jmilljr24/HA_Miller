@@ -1,4 +1,6 @@
 
+
+
 #### Driveway Light Sunset and Sunrise ####
 - id: SunDownDriveway
   alias: Driveway Light ON at sunset
@@ -9,7 +11,7 @@
     offset: '-00:45:00'
   action:
     service: homeassistant.turn_on
-    entity_id: light.level
+    entity_id: light.driveway
     data:
       brightness: 255
 
@@ -22,7 +24,7 @@
     offset: '00:45:00'
   action:
     service: homeassistant.turn_off
-    entity_id: light.level
+    entity_id: light.driveway
     
 ##SSL Cert##    
 - alias: 'Auto Renew SSL Cert'
